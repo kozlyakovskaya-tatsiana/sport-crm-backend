@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFit.Domain", "SelfFit.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFit.Application", "SelfFit.Application\SelfFit.Application.csproj", "{F696B22A-AA06-4C43-A7AD-C3F818474A0F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFit.Persistence", "Persistence\SelfFit.Persistence.csproj", "{196ECBD7-91CE-4FD3-83B4-A8E5808F46C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFit.Persistence", "SelfFit.Persistence\SelfFit.Persistence.csproj", "{196ECBD7-91CE-4FD3-83B4-A8E5808F46C2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfFit.WebApi", "SelfFit.WebApi\SelfFit.WebApi.csproj", "{AFD8286E-AEF4-42CD-B42B-B75B8979284D}"
 EndProject
