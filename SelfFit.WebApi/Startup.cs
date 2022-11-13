@@ -1,18 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using SelfFit.Application;
+using SelfFit.Persistence;
+using SelfFit.Persistence.Options;
 
 namespace SelfFit.WebApi
 {
@@ -26,9 +23,20 @@ namespace SelfFit.WebApi
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddApplication();
+            services.AddPersistence(Configuration);
+
+            services.Configure<PasswordOptions>(Configuration.GetSection("PasswordOptions"));
+
+            //var options = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
 
             services.AddSwaggerGen(options =>
             {
@@ -61,8 +69,9 @@ namespace SelfFit.WebApi
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
+            
             app.UseRouting();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
