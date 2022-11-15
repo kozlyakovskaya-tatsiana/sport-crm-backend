@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SelfFit.Application;
-using SelfFit.Application.Interfaces;
 using SelfFit.Application.Services;
 using SelfFit.Domain.Entities;
 using SelfFit.Persistence.Services;
