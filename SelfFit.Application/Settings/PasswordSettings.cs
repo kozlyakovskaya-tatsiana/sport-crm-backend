@@ -1,6 +1,6 @@
-﻿namespace SelfFit.Persistence.Options
+﻿namespace SelfFit.Application.Settings
 {
-    public class PasswordOptions
+    public class PasswordSettings
     {
         public int RequiredMinLength { get; set; }
         public bool RequireNonAlphanumeric { get; set; }

@@ -7,9 +7,11 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity;
 using SelfFit.Application;
+using SelfFit.Application.Settings;
+using SelfFit.Domain.Entities;
 using SelfFit.Persistence;
-using SelfFit.Persistence.Options;
 
 namespace SelfFit.WebApi
 {
@@ -22,25 +24,22 @@ namespace SelfFit.WebApi
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddControllers();
 
             services.AddApplication();
             services.AddPersistence(Configuration);
 
-            services.Configure<PasswordOptions>(Configuration.GetSection("PasswordOptions"));
+            services.Configure<PasswordSettings>(Configuration.GetSection("PasswordSettings"));
+            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
+            services.Configure<DefaultUserSettings>(Configuration.GetSection("DefaultUserSettings"));
 
-            //var options = Configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+            var set = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
             services.AddSwaggerGen(options =>
             {
-                // c.IncludeXmlComments($@"{System.AppDomain.CurrentDomain.BaseDirectory}\SelfFit.xml");
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
@@ -52,8 +51,10 @@ namespace SelfFit.WebApi
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            SelfFitDbSeeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -65,13 +66,15 @@ namespace SelfFit.WebApi
                 {
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "SelfFit");
                 });
+
+                seeder.SeedAsync().GetAwaiter().GetResult();
             }
 
             app.UseHttpsRedirection();
 
-            app.UseAuthentication();
-            
             app.UseRouting();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

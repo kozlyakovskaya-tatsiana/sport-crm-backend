@@ -1,34 +1,26 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SelfFit.Application.Features.UserFeatures.Commands;
-using SelfFit.WebApi.Models.Requests.User;
+using SelfFit.WebApi.Models.User.Requests;
 
 namespace SelfFit.WebApi.Controllers
 {
-    /// <summary>
-    /// 
-    /// </summary>
+
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="mediator"></param>
-        public UsersController(IMediator mediator)
+        public UsersController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="command"></param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserRequest createUserRequest)
         {
@@ -39,6 +31,18 @@ namespace SelfFit.WebApi.Controllers
             });
 
             return Ok();
+        }
+
+        [HttpPost("sign-in")]
+        public async Task<IActionResult> SignIn(SignInRequest signInRequest)
+        {
+            var signInResult = await _mediator.Send(new SignInUserCommand()
+            {
+                Email = signInRequest.Email,
+                Password = signInRequest.Password
+            });
+
+            return Ok(signInResult);
         }
     }
 }

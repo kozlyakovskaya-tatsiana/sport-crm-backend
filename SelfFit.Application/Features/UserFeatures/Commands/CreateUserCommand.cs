@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using SelfFit.Application.Interfaces;
 using SelfFit.Domain.Entities;
 
 namespace SelfFit.Application.Features.UserFeatures.Commands
@@ -18,15 +13,15 @@ namespace SelfFit.Application.Features.UserFeatures.Commands
         
         public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, bool >
         {
-            private readonly UserManager<User> _userManager;
+            private readonly UserManager<SelfFitUser> _userManager;
 
-            public CreateUserCommandHandler(UserManager<User> userManager)
+            public CreateUserCommandHandler(UserManager<SelfFitUser> userManager)
             {
                 _userManager = userManager;
             }
             public async Task<bool> Handle(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
             {
-                var user = new User
+                var user = new SelfFitUser
                 {
                     Email = createUserCommand.Email,
                     UserName = createUserCommand.Email
@@ -37,6 +32,5 @@ namespace SelfFit.Application.Features.UserFeatures.Commands
                 return result.Succeeded;
             }
         }
-
     }
 }
