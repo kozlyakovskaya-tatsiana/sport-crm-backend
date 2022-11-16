@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using SelfFit.Domain.Entities;
 using SelfFit.Identity.Entities;
 
 namespace SelfFit.Identity.Features.UserFeatures.Commands

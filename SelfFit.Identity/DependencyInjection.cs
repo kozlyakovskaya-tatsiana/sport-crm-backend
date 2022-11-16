@@ -22,6 +22,7 @@ namespace SelfFit.Identity
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(o =>
@@ -33,7 +34,6 @@ namespace SelfFit.Identity
                         ValidateIssuerSigningKey = true,
                         ValidateIssuer = true,
                         ValidateAudience = true,
-                        ValidateLifetime = true,
                         ClockSkew = TimeSpan.Zero,
                         ValidIssuer = configuration.GetSection("JwtSettings:Issuer").Value,
                         ValidAudience = configuration.GetSection("JwtSettings:Audience").Value,

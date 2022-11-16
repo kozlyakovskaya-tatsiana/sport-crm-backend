@@ -3,18 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace SelfFit.WebApi.Controllers
 {
-    /// <summary>
-    /// rtt
-    /// </summary>
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class SecureController : ControllerBase
     {
-        /// <summary>
-        /// rewt
-        /// </summary>
-        /// <returns></returns>
         [HttpGet]
         public IActionResult GetSecuredData()
         {

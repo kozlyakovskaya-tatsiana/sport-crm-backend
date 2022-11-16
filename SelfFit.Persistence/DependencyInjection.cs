@@ -2,9 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using SelfFit.Application;
-using SelfFit.Domain.Entities;
-using SelfFit.Identity;
 using SelfFit.Identity.Entities;
+using SelfFit.Persistence.Seeders;
 
 
 namespace SelfFit.Persistence
@@ -21,9 +20,7 @@ namespace SelfFit.Persistence
 
             services.AddScoped<SelfFitAuthenticationDbSeeder>();
 
-            services
-                .AddIdentityCore<SelfFitIdentityUser>()
-                .AddRoles<SelfFitRole>()
+            services.AddIdentity<SelfFitIdentityUser, SelfFitRole>()
                 .AddEntityFrameworkStores<SelfFitDbContextWithIdentity>();
         }
     }

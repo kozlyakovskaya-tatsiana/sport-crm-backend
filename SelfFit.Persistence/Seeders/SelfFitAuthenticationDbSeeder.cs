@@ -7,7 +7,7 @@ using SelfFit.Identity.Authorization;
 using SelfFit.Identity.Entities;
 using SelfFit.Identity.Settings;
 
-namespace SelfFit.Identity
+namespace SelfFit.Persistence.Seeders
 {
     public class SelfFitAuthenticationDbSeeder
     {

@@ -3,14 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using System;
-using System.IO;
-using System.Reflection;
 using SelfFit.Application;
 using SelfFit.Identity;
 using SelfFit.Identity.Settings;
 using SelfFit.Persistence;
+using SelfFit.Persistence.Seeders;
+using SelfFit.WebApi.Extensions;
 
 namespace SelfFit.WebApi
 {
@@ -25,7 +24,9 @@ namespace SelfFit.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerConfiguration();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddControllers();
 
             services.AddApplication();
@@ -35,18 +36,6 @@ namespace SelfFit.WebApi
             services.Configure<PasswordSettings>(Configuration.GetSection("PasswordSettings"));
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             services.Configure<DefaultUserSettings>(Configuration.GetSection("DefaultUserSettings"));
-
-            services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "SelfFitApi",
-                });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-            });
         }
 
         public void Configure(
