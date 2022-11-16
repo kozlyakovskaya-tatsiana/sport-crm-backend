@@ -1,28 +1,36 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Identity;
+﻿using System.Linq;
 using System.Threading.Tasks;
-using SelfFit.Application.Authorization;
-using SelfFit.Application.Settings;
-using SelfFit.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using SelfFit.Application;
+using SelfFit.Identity.Authorization;
+using SelfFit.Identity.Entities;
+using SelfFit.Identity.Settings;
 
-namespace SelfFit.Persistence
+namespace SelfFit.Identity
 {
-    public class SelfFitDbSeeder
+    public class SelfFitAuthenticationDbSeeder
     {
-        private readonly UserManager<SelfFitUser> _userManager;
+        private readonly UserManager<SelfFitIdentityUser> _userManager;
         private readonly RoleManager<SelfFitRole> _roleManager;
         private readonly DefaultUserSettings _defaultUserSettings;
+        private readonly ISelfFitDbContext _selfFitDbContext;
 
-        public SelfFitDbSeeder(UserManager<SelfFitUser> userManager, RoleManager<SelfFitRole> roleManager, DefaultUserSettings defaultUserSettings)
+        public SelfFitAuthenticationDbSeeder(
+            UserManager<SelfFitIdentityUser> userManager,
+            RoleManager<SelfFitRole> roleManager,
+            IOptions<DefaultUserSettings> defaultUserSettings,
+            ISelfFitDbContext selfFitDbContext)
         {
             _userManager=userManager;
             _roleManager=roleManager;
-            _defaultUserSettings=defaultUserSettings;
+            _defaultUserSettings=defaultUserSettings.Value;
+            _selfFitDbContext = selfFitDbContext;
         }
 
-        public async Task SeedAsync()
+        public async Task SeedRolesAndUsersAsync()
         {
+            await _selfFitDbContext.MigrateAsync();
             await SeedRolesAsync();
             await SeedUsersAsync();
         }
@@ -44,7 +52,7 @@ namespace SelfFit.Persistence
             {
                 foreach (var defaultUser in _defaultUserSettings.DefaultUsers)
                 {
-                    var user = new SelfFitUser
+                    var user = new SelfFitIdentityUser
                     {
                         Email = defaultUser.Email,
                         UserName = defaultUser.Email

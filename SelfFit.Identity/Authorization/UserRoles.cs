@@ -1,4 +1,4 @@
-﻿namespace SelfFit.Application.Authorization
+﻿namespace SelfFit.Identity.Authorization
 {
     public static class UserRoles
     {

@@ -7,10 +7,9 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
-using Microsoft.AspNetCore.Identity;
 using SelfFit.Application;
-using SelfFit.Application.Settings;
-using SelfFit.Domain.Entities;
+using SelfFit.Identity;
+using SelfFit.Identity.Settings;
 using SelfFit.Persistence;
 
 namespace SelfFit.WebApi
@@ -31,12 +30,11 @@ namespace SelfFit.WebApi
 
             services.AddApplication();
             services.AddPersistence(Configuration);
+            services.AddAuthenticationAndAuthorization(Configuration);
 
             services.Configure<PasswordSettings>(Configuration.GetSection("PasswordSettings"));
             services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
             services.Configure<DefaultUserSettings>(Configuration.GetSection("DefaultUserSettings"));
-
-            var set = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
 
             services.AddSwaggerGen(options =>
             {
@@ -54,7 +52,7 @@ namespace SelfFit.WebApi
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            SelfFitDbSeeder seeder)
+            SelfFitAuthenticationDbSeeder seeder)
         {
             if (env.IsDevelopment())
             {
@@ -67,7 +65,7 @@ namespace SelfFit.WebApi
                     options.SwaggerEndpoint("/swagger/v1/swagger.json", "SelfFit");
                 });
 
-                seeder.SeedAsync().GetAwaiter().GetResult();
+                seeder.SeedRolesAndUsersAsync().GetAwaiter().GetResult();
             }
 
             app.UseHttpsRedirection();

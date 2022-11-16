@@ -1,14 +1,11 @@
-﻿using System;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using SelfFit.Application;
-using SelfFit.Application.Services;
 using SelfFit.Domain.Entities;
-using SelfFit.Persistence.Services;
+using SelfFit.Identity;
+using SelfFit.Identity.Entities;
+
 
 namespace SelfFit.Persistence
 {
@@ -16,40 +13,18 @@ namespace SelfFit.Persistence
     {
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<SelfFitDbContext>(options =>
+            services.AddDbContext<SelfFitDbContextWithIdentity>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(SelfFitDbContext).Assembly.FullName)));
-            services.AddScoped<SelfFitDbContextBase>(provider => provider.GetService<SelfFitDbContext>());
+                    b => b.MigrationsAssembly(typeof(SelfFitDbContextWithIdentity).Assembly.FullName)));
+            services.AddScoped<ISelfFitDbContext>(provider => provider.GetService<SelfFitDbContextWithIdentity>());
 
-            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<SelfFitAuthenticationDbSeeder>();
 
             services
-                .AddIdentityCore<SelfFitUser>()
+                .AddIdentityCore<SelfFitIdentityUser>()
                 .AddRoles<SelfFitRole>()
-                .AddEntityFrameworkStores<SelfFitDbContext>();
-
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(o =>
-                {
-                    o.RequireHttpsMetadata = false;
-                    o.SaveToken = false;
-                    o.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero,
-                        ValidIssuer = configuration.GetSection("JwtSettings:Issuer").Value,
-                        ValidAudience = configuration["JwtSettings:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
-                    };
-                });
+                .AddEntityFrameworkStores<SelfFitDbContextWithIdentity>();
         }
     }
 }

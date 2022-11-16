@@ -7,12 +7,12 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SelfFit.Application.Exceptions;
-using SelfFit.Application.Features.UserFeatures.Models;
-using SelfFit.Application.Services;
-using SelfFit.Application.Settings;
-using SelfFit.Domain.Entities;
+using SelfFit.Identity.Entities;
+using SelfFit.Identity.Features.UserFeatures.Models;
+using SelfFit.Identity.Services;
+using SelfFit.Identity.Settings;
 
-namespace SelfFit.Application.Features.UserFeatures.Commands
+namespace SelfFit.Identity.Features.UserFeatures.Commands
 {
     public class SignInUserCommand : IRequest<SignInUserResult>
     {
@@ -21,12 +21,12 @@ namespace SelfFit.Application.Features.UserFeatures.Commands
 
         public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, SignInUserResult>
         {
-            private readonly UserManager<SelfFitUser> _userManager;
+            private readonly UserManager<SelfFitIdentityUser> _userManager;
             private readonly ITokenService _tokenService;
             private readonly JwtSettings _jwtSettings;
 
             public SignInUserCommandHandler(
-                UserManager<SelfFitUser> userManager,
+                UserManager<SelfFitIdentityUser> userManager,
                 ITokenService tokenService,
                 IOptions<JwtSettings> jwtOptions)
             {

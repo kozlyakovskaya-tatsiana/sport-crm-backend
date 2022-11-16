@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SelfFit.Application.Settings
+namespace SelfFit.Identity.Settings
 {
     public class DefaultUser
     {

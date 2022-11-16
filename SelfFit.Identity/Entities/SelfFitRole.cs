@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace SelfFit.Domain.Entities
+namespace SelfFit.Identity.Entities
 {
     public class SelfFitRole : IdentityRole<Guid>
     {

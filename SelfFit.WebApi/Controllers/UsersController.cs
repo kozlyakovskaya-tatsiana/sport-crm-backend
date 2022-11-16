@@ -2,7 +2,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SelfFit.Application.Features.UserFeatures.Commands;
+using SelfFit.Identity.Features.UserFeatures.Commands;
 using SelfFit.WebApi.Models.User.Requests;
 
 namespace SelfFit.WebApi.Controllers

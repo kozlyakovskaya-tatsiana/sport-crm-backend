@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SelfFit.Application.Features.UserFeatures.Models
+namespace SelfFit.Identity.Features.UserFeatures.Models
 {
     public class SignInUserResult
     {

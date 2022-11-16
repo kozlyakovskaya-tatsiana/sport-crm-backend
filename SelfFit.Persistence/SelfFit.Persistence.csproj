@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\SelfFit.Application\SelfFit.Application.csproj" />
     <ProjectReference Include="..\SelfFit.Domain\SelfFit.Domain.csproj" />
+    <ProjectReference Include="..\SelfFit.Identity\SelfFit.Identity.csproj" />
   </ItemGroup>
 
 </Project>

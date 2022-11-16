@@ -1,6 +1,4 @@
-﻿using SelfFit.Application.Authorization;
-
-namespace SelfFit.WebApi.Models.User.Requests
+﻿namespace SelfFit.WebApi.Models.User.Requests
 {
     public class CreateUserRequest
     {

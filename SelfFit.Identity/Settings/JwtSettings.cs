@@ -1,4 +1,4 @@
-﻿namespace SelfFit.Application.Settings
+﻿namespace SelfFit.Identity.Settings
 {
     public class JwtSettings
     {

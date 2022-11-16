@@ -6,10 +6,9 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using SelfFit.Application.Services;
-using SelfFit.Application.Settings;
+using SelfFit.Identity.Settings;
 
-namespace SelfFit.Persistence.Services
+namespace SelfFit.Identity.Services.Realization
 {
     public class TokenService : ITokenService
     {

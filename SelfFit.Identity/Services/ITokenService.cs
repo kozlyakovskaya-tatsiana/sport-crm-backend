@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace SelfFit.Application.Services
+namespace SelfFit.Identity.Services
 {
     public interface ITokenService
     {

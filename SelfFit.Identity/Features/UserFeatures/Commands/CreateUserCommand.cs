@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SelfFit.Domain.Entities;
+using SelfFit.Identity.Entities;
 
-namespace SelfFit.Application.Features.UserFeatures.Commands
+namespace SelfFit.Identity.Features.UserFeatures.Commands
 {
     public class CreateUserCommand : IRequest<bool>
     {
@@ -13,15 +14,15 @@ namespace SelfFit.Application.Features.UserFeatures.Commands
         
         public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, bool >
         {
-            private readonly UserManager<SelfFitUser> _userManager;
+            private readonly UserManager<SelfFitIdentityUser> _userManager;
 
-            public CreateUserCommandHandler(UserManager<SelfFitUser> userManager)
+            public CreateUserCommandHandler(UserManager<SelfFitIdentityUser> userManager)
             {
                 _userManager = userManager;
             }
             public async Task<bool> Handle(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
             {
-                var user = new SelfFitUser
+                var user = new SelfFitIdentityUser
                 {
                     Email = createUserCommand.Email,
                     UserName = createUserCommand.Email

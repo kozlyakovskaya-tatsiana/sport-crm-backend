@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using SelfFit.Application.Features.UserFeatures.Commands;
+using SelfFit.Identity.Features.UserFeatures.Commands;
 using SelfFit.WebApi.Models.User.Requests;
 
 namespace SelfFit.WebApi.Profiles
