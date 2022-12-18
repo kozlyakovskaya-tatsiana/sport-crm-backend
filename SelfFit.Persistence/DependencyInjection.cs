@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using SelfFit.Application;
 using SelfFit.Identity.Entities;
+using SelfFit.Identity.Settings;
 using SelfFit.Persistence.Seeders;
 
 
@@ -20,7 +21,15 @@ namespace SelfFit.Persistence
 
             services.AddScoped<SelfFitAuthenticationDbSeeder>();
 
-            services.AddIdentity<SelfFitIdentityUser, SelfFitRole>()
+            services.AddIdentity<SelfFitIdentityUser, SelfFitRole>(options =>
+                {
+                    var passwordSettings = configuration.GetSection("PasswordSettings").Get<PasswordSettings>();
+                    options.Password.RequiredLength = passwordSettings.RequireMinLength;
+                    options.Password.RequireNonAlphanumeric = passwordSettings.RequireNonAlphanumeric;
+                    options.Password.RequireLowercase = passwordSettings.RequireLowercase;
+                    options.Password.RequireUppercase = passwordSettings.RequireUppercase;
+                    options.Password.RequireDigit = passwordSettings.RequireDigit;
+                })
                 .AddEntityFrameworkStores<SelfFitDbContextWithIdentity>();
         }
     }

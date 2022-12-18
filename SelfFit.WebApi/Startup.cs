@@ -6,7 +6,6 @@ using Microsoft.Extensions.Hosting;
 using System;
 using SelfFit.Application;
 using SelfFit.Identity;
-using SelfFit.Identity.Settings;
 using SelfFit.Persistence;
 using SelfFit.Persistence.Seeders;
 using SelfFit.WebApi.Extensions;
@@ -32,10 +31,6 @@ namespace SelfFit.WebApi
             services.AddApplication();
             services.AddPersistence(Configuration);
             services.AddAuthenticationAndAuthorization(Configuration);
-
-            services.Configure<PasswordSettings>(Configuration.GetSection("PasswordSettings"));
-            services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
-            services.Configure<DefaultUserSettings>(Configuration.GetSection("DefaultUserSettings"));
         }
 
         public void Configure(
@@ -56,6 +51,8 @@ namespace SelfFit.WebApi
 
                 seeder.SeedRolesAndUsersAsync().GetAwaiter().GetResult();
             }
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseHttpsRedirection();
 

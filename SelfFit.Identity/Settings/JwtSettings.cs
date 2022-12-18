@@ -6,6 +6,6 @@
         public string Issuer { get; set; }
         public string Audience { get; set; }
         public double TokenLifeTimeInMinutes { get; set; }
-        public double RefreshTokenLifeInMinutes { get; set; }
+        public double RefreshTokenLifeTimeInMinutes { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace SelfFit.Identity.Services.Realization
             return Convert.ToBase64String(randomNumber);
         }
 
-        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        public ClaimsPrincipal GetPrincipalFromToken(string token)
         {
             var tokenValidationParameters = new TokenValidationParameters
             {

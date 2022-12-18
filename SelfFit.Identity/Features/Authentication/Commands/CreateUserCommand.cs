@@ -4,7 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using SelfFit.Identity.Entities;
 
-namespace SelfFit.Identity.Features.UserFeatures.Commands
+namespace SelfFit.Identity.Features.Authentication.Commands
 {
     public class CreateUserCommand : IRequest<bool>
     {

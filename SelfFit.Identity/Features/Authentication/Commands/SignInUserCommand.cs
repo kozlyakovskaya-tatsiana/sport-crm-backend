@@ -8,11 +8,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SelfFit.Application.Exceptions;
 using SelfFit.Identity.Entities;
-using SelfFit.Identity.Features.UserFeatures.Models;
+using SelfFit.Identity.Features.Authentication.Models;
 using SelfFit.Identity.Services;
 using SelfFit.Identity.Settings;
 
-namespace SelfFit.Identity.Features.UserFeatures.Commands
+namespace SelfFit.Identity.Features.Authentication.Commands
 {
     public class SignInUserCommand : IRequest<SignInUserResult>
     {
@@ -48,19 +48,19 @@ namespace SelfFit.Identity.Features.UserFeatures.Commands
                     throw new ArgumentException("Incorrect input data.");
                 }
                 var userRoles = await _userManager.GetRolesAsync(user);
-                var roleClaims = userRoles.Select(t => new Claim(ClaimTypes.Role, t)).ToList();
+                var roleClaims = userRoles.Select(role => new Claim("role", role));
                 var claims = new[]
-                    {
-                        new Claim(ClaimTypes.Name, user.UserName),
-                        new Claim(ClaimTypes.Email, user.Email),
-                        new Claim("uid", user.Id.ToString()),
-                    }
-                    .Union(roleClaims);
+                {
+                    new Claim("userName", user.UserName),
+                    new Claim("email", user.Email),
+                    new Claim("uid", user.Id.ToString()),
+                    new Claim("role", string.Join(";",roleClaims.Select(claim => claim.Value)))
+                };
                 var accessToken = _tokenService.GenerateAccessToken(claims);
                 var refreshToken = _tokenService.GenerateRefreshToken();
 
                 user.RefreshToken = refreshToken;
-                user.RefreshTokenExpirationDateTime = DateTime.UtcNow.AddMinutes(_jwtSettings.RefreshTokenLifeInMinutes);
+                user.RefreshTokenExpirationDateTime = DateTimeOffset.UtcNow.AddMinutes(_jwtSettings.RefreshTokenLifeTimeInMinutes);
 
                 await _userManager.UpdateAsync(user);
 
@@ -68,9 +68,6 @@ namespace SelfFit.Identity.Features.UserFeatures.Commands
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,
-                    Roles = userRoles,
-                    UserId = user.Id,
-                    UserName = user.UserName
                 };
             }
         }

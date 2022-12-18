@@ -7,6 +7,6 @@ namespace SelfFit.Identity.Services
     {
         string GenerateAccessToken(IEnumerable<Claim> claims);
         string GenerateRefreshToken();
-        ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
+        ClaimsPrincipal GetPrincipalFromToken(string token);
     }
 }
