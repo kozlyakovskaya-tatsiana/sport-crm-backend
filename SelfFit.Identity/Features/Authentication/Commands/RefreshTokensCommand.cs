@@ -9,7 +9,7 @@ using SelfFit.Identity.Models;
 using SelfFit.Identity.Services;
 using SelfFit.Identity.Settings;
 
-namespace SelfFit.Identity.Features.Token.Commands
+namespace SelfFit.Identity.Features.Authentication.Commands
 {
     public class RefreshTokensCommand : IRequest<TokenPair>
     {

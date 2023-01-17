@@ -4,11 +4,16 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Linq;
+using System.Net.Http;
+using Microsoft.Extensions.Options;
 using SelfFit.Application;
 using SelfFit.Identity;
 using SelfFit.Persistence;
 using SelfFit.Persistence.Seeders;
 using SelfFit.WebApi.Extensions;
+using SelfFit.WebApi.Middleware;
+using SelfFit.WebApi.Options;
 
 namespace SelfFit.WebApi
 {
@@ -23,6 +28,8 @@ namespace SelfFit.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<OriginsOptions>(Configuration.GetSection("Origins"));
+            services.AddCors();
             services.AddSwaggerConfiguration();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -36,7 +43,8 @@ namespace SelfFit.WebApi
         public void Configure(
             IApplicationBuilder app,
             IWebHostEnvironment env,
-            SelfFitAuthenticationDbSeeder seeder)
+            SelfFitAuthenticationDbSeeder seeder,
+            IOptions<OriginsOptions> originsOptions)
         {
             if (env.IsDevelopment())
             {
@@ -52,14 +60,21 @@ namespace SelfFit.WebApi
                 seeder.SeedRolesAndUsersAsync().GetAwaiter().GetResult();
             }
 
-            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
-
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
+            app.UseCors(builder => builder
+                .WithOrigins(originsOptions.Value.OriginUrls?.ToArray())
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .Build()
+            );
+
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

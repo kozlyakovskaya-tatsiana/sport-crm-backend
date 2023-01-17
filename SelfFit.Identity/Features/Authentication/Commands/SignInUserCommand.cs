@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SelfFit.Application.Exceptions;
@@ -40,7 +41,7 @@ namespace SelfFit.Identity.Features.Authentication.Commands
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
-                    throw new NotFoundException($"User with email {request.Email} doesn't exist.");
+                    throw new ArgumentException("Incorrect input data.");
                 }
                 var isUserAuthenticated = await _userManager.CheckPasswordAsync(user, request.Password);
                 if (!isUserAuthenticated)

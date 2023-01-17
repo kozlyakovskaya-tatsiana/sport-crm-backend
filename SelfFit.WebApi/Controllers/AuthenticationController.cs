@@ -3,7 +3,6 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SelfFit.Identity.Features.Authentication.Commands;
-using SelfFit.Identity.Features.Token.Commands;
 using SelfFit.WebApi.Models.User.Requests;
 
 namespace SelfFit.WebApi.Controllers
