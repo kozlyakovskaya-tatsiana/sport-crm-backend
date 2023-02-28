@@ -11,17 +11,17 @@ namespace SelfFit.Application.Features.Activities.Queries
     {
         public class GetActivitiesQueryHandler: IRequestHandler<GetActivitiesQuery, IEnumerable<SportActivity>>
         {
-            private readonly ISportActivitiesRepository _sportActivitiesRepository;
+            private readonly ISportActivityRepository _sportActivityRepository;
 
-            public GetActivitiesQueryHandler(ISportActivitiesRepository sportActivitiesRepository)
+            public GetActivitiesQueryHandler(ISportActivityRepository sportActivityRepository)
             {
-                _sportActivitiesRepository = sportActivitiesRepository;
+                _sportActivityRepository = sportActivityRepository;
             }
 
             public async Task<IEnumerable<SportActivity>> Handle(GetActivitiesQuery query,
                 CancellationToken cancellationToken)
             {
-                return await _sportActivitiesRepository.GetAllAsync();
+                return await _sportActivityRepository.GetAllAsync();
             }
         }
     }

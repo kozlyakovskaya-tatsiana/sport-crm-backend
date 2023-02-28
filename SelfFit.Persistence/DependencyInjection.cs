@@ -20,10 +20,10 @@ namespace SelfFit.Persistence
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(SelfFitDbContext).Assembly.FullName)));
-            services.AddScoped(provider => provider.GetService<SelfFitDbContext>());
+            services.AddScoped<SelfFitDbContext>();
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<ISportActivitiesRepository, SportSportActivitiesRepository>();
+            services.AddScoped<ISportActivityRepository, SportActivityRepository>();
 
             services.AddScoped<SelfFitAuthenticationDbSeeder>();
 

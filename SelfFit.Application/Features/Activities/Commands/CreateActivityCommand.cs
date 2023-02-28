@@ -14,11 +14,11 @@ namespace SelfFit.Application.Features.Activities.Commands
 
         public class CreateActivityCommandHandler : IRequestHandler<CreateActivityCommand, bool>
         {
-            private readonly ISportActivitiesRepository _sportActivitiesRepository;
+            private readonly ISportActivityRepository _sportActivityRepository;
 
-            public CreateActivityCommandHandler(ISportActivitiesRepository sportActivitiesRepository)
+            public CreateActivityCommandHandler(ISportActivityRepository sportActivityRepository)
             {
-                _sportActivitiesRepository = sportActivitiesRepository;
+                _sportActivityRepository = sportActivityRepository;
             }
 
             public async Task<bool> Handle(CreateActivityCommand command, CancellationToken cancellationToken)
@@ -33,12 +33,12 @@ namespace SelfFit.Application.Features.Activities.Commands
                     Name = command.ActivityName,
                     CostPerHourInByn = command.CostPerHourInByn
                 };
-                return await _sportActivitiesRepository.AddAsync(activityToAdd);
+                return await _sportActivityRepository.AddAsync(activityToAdd);
             }
 
             private async Task<bool> IsActivityWithSpecifiedNameExists(string sportActivityName)
             {
-                return await _sportActivitiesRepository.Exist(activity => activity.Name == sportActivityName);
+                return await _sportActivityRepository.Exist(activity => activity.Name == sportActivityName);
             }
         }
     }
