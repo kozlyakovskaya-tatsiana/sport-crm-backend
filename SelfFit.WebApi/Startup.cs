@@ -5,7 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
-using System.Net.Http;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using SelfFit.Application;
 using SelfFit.Identity;
@@ -14,6 +15,7 @@ using SelfFit.Persistence.Seeders;
 using SelfFit.WebApi.Extensions;
 using SelfFit.WebApi.Middleware;
 using SelfFit.WebApi.Options;
+using SelfFit.WebApi.Validators.Authentication;
 
 namespace SelfFit.WebApi
 {
@@ -32,8 +34,13 @@ namespace SelfFit.WebApi
             services.AddCors();
             services.AddSwaggerConfiguration();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddFluentValidationAutoValidation();
+            services.AddValidatorsFromAssemblyContaining<SignInRequestValidator>();
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(jsonOptions =>
+            {
+                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
+            });
 
             services.AddApplication();
             services.AddPersistence(Configuration);

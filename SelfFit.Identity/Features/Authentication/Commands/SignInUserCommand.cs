@@ -4,30 +4,28 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using SelfFit.Application.Exceptions;
-using SelfFit.Identity.Entities;
-using SelfFit.Identity.Features.Authentication.Models;
+using SelfFit.Domain.Entities;
+using SelfFit.Identity.Models;
 using SelfFit.Identity.Services;
 using SelfFit.Identity.Settings;
 
 namespace SelfFit.Identity.Features.Authentication.Commands
 {
-    public class SignInUserCommand : IRequest<SignInUserResult>
+    public class SignInUserCommand : IRequest<TokenPair>
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, SignInUserResult>
+        public class SignInUserCommandHandler : IRequestHandler<SignInUserCommand, TokenPair>
         {
-            private readonly UserManager<SelfFitIdentityUser> _userManager;
+            private readonly UserManager<User> _userManager;
             private readonly ITokenService _tokenService;
             private readonly JwtSettings _jwtSettings;
 
             public SignInUserCommandHandler(
-                UserManager<SelfFitIdentityUser> userManager,
+                UserManager<User> userManager,
                 ITokenService tokenService,
                 IOptions<JwtSettings> jwtOptions)
             {
@@ -36,7 +34,7 @@ namespace SelfFit.Identity.Features.Authentication.Commands
                 _jwtSettings = jwtOptions.Value;
             }
 
-            public async Task<SignInUserResult> Handle(SignInUserCommand request, CancellationToken cancellationToken)
+            public async Task<TokenPair> Handle(SignInUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
@@ -65,7 +63,7 @@ namespace SelfFit.Identity.Features.Authentication.Commands
 
                 await _userManager.UpdateAsync(user);
 
-                return new SignInUserResult()
+                return new TokenPair()
                 {
                     AccessToken = accessToken,
                     RefreshToken = refreshToken,

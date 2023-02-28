@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using SelfFit.Application;
+using SelfFit.Domain.Entities;
 using SelfFit.Identity.Authorization;
 using SelfFit.Identity.Entities;
 using SelfFit.Identity.Settings;
@@ -11,16 +12,16 @@ namespace SelfFit.Persistence.Seeders
 {
     public class SelfFitAuthenticationDbSeeder
     {
-        private readonly UserManager<SelfFitIdentityUser> _userManager;
-        private readonly RoleManager<SelfFitRole> _roleManager;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<Role> _roleManager;
         private readonly DefaultUserSettings _defaultUserSettings;
-        private readonly ISelfFitDbContext _selfFitDbContext;
+        private readonly SelfFitDbContext _selfFitDbContext;
 
         public SelfFitAuthenticationDbSeeder(
-            UserManager<SelfFitIdentityUser> userManager,
-            RoleManager<SelfFitRole> roleManager,
+            UserManager<User> userManager,
+            RoleManager<Role> roleManager,
             IOptions<DefaultUserSettings> defaultUserSettings,
-            ISelfFitDbContext selfFitDbContext)
+            SelfFitDbContext selfFitDbContext)
         {
             _userManager=userManager;
             _roleManager=roleManager;
@@ -39,11 +40,11 @@ namespace SelfFit.Persistence.Seeders
         {
             if (!_roleManager.Roles.Any(role => role.Name == UserRoles.Admin))
             {
-                await _roleManager.CreateAsync(new SelfFitRole(UserRoles.Admin));
+                await _roleManager.CreateAsync(new Role(UserRoles.Admin));
             }
             if (!_roleManager.Roles.Any(role => role.Name == UserRoles.Instructor))
             {
-                await _roleManager.CreateAsync(new SelfFitRole(UserRoles.Instructor));
+                await _roleManager.CreateAsync(new Role(UserRoles.Instructor));
             }
         }
         private async Task SeedUsersAsync()
@@ -52,7 +53,7 @@ namespace SelfFit.Persistence.Seeders
             {
                 foreach (var defaultUser in _defaultUserSettings.DefaultUsers)
                 {
-                    var user = new SelfFitIdentityUser
+                    var user = new User
                     {
                         Email = defaultUser.Email,
                         UserName = defaultUser.Email

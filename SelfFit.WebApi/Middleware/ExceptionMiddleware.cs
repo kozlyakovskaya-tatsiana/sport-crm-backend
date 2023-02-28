@@ -3,9 +3,6 @@ using SelfFit.WebApi.Models.ErrorHandling;
 using System.Net;
 using System.Threading.Tasks;
 using System;
-using System.Diagnostics;
-using System.IO.Compression;
-using Microsoft.Extensions.Logging;
 using SelfFit.Application.Exceptions;
 
 namespace SelfFit.WebApi.Middleware
@@ -36,6 +33,7 @@ namespace SelfFit.WebApi.Middleware
                 ArgumentNullException => (int)HttpStatusCode.BadRequest,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 NotFoundException => (int)HttpStatusCode.NotFound,
+                AlreadyExistsException => (int)HttpStatusCode.Conflict,
                 _ => (int)HttpStatusCode.InternalServerError
             };
             await context.Response.WriteAsync(new ErrorDetails()

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SelfFit.WebApi.Models.User.Requests;
 using System.Threading.Tasks;
 using SelfFit.Identity.Features.Authentication.Commands;
+using SelfFit.WebApi.Models.User;
 
 namespace SelfFit.WebApi.Controllers
 {

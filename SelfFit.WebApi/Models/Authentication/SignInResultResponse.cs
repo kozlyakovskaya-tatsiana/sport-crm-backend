@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SelfFit.WebApi.Models.User.Responses
+namespace SelfFit.WebApi.Models.Authentication
 {
     public class SignInResultResponse
     {

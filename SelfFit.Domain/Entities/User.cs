@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 
-namespace SelfFit.Identity.Entities
+namespace SelfFit.Domain.Entities
 {
-    public class SelfFitIdentityUser: IdentityUser<Guid>
+    public class User: IdentityUser<Guid>
     {
         public string RefreshToken { get; set; }
         public DateTimeOffset RefreshTokenExpirationDateTime { get; set; }
+
+        public List<SportGroup> SportGroups { get; set; }
     }
 }

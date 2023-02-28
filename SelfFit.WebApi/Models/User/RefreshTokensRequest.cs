@@ -1,6 +1,6 @@
-﻿namespace SelfFit.Identity.Features.Authentication.Models
+﻿namespace SelfFit.WebApi.Models.User
 {
-    public class SignInUserResult
+    public class RefreshTokensRequest
     {
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }

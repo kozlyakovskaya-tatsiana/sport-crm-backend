@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity;
 
 namespace SelfFit.Identity.Entities
 {
-    public class SelfFitRole : IdentityRole<Guid>
+    public class Role : IdentityRole<Guid>
     {
-        public SelfFitRole()
+        public Role()
         { }
-        public SelfFitRole(string roleName) : base(roleName)
+        public Role(string roleName) : base(roleName)
         {
 
         }

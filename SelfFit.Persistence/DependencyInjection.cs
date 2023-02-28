@@ -2,8 +2,11 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using SelfFit.Application;
+using SelfFit.Application.Repositories;
+using SelfFit.Domain.Entities;
 using SelfFit.Identity.Entities;
 using SelfFit.Identity.Settings;
+using SelfFit.Persistence.Repositories;
 using SelfFit.Persistence.Seeders;
 
 
@@ -13,15 +16,18 @@ namespace SelfFit.Persistence
     {
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<SelfFitDbContextWithIdentity>(options =>
+            services.AddDbContext<SelfFitDbContext>(options =>
                 options.UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
-                    b => b.MigrationsAssembly(typeof(SelfFitDbContextWithIdentity).Assembly.FullName)));
-            services.AddScoped<ISelfFitDbContext>(provider => provider.GetService<SelfFitDbContextWithIdentity>());
+                    b => b.MigrationsAssembly(typeof(SelfFitDbContext).Assembly.FullName)));
+            services.AddScoped(provider => provider.GetService<SelfFitDbContext>());
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<ISportActivitiesRepository, SportSportActivitiesRepository>();
 
             services.AddScoped<SelfFitAuthenticationDbSeeder>();
 
-            services.AddIdentity<SelfFitIdentityUser, SelfFitRole>(options =>
+            services.AddIdentity<User, Role>(options =>
                 {
                     var passwordSettings = configuration.GetSection("PasswordSettings").Get<PasswordSettings>();
                     options.Password.RequiredLength = passwordSettings.RequireMinLength;
@@ -30,7 +36,7 @@ namespace SelfFit.Persistence
                     options.Password.RequireUppercase = passwordSettings.RequireUppercase;
                     options.Password.RequireDigit = passwordSettings.RequireDigit;
                 })
-                .AddEntityFrameworkStores<SelfFitDbContextWithIdentity>();
+                .AddEntityFrameworkStores<SelfFitDbContext>();
         }
     }
 }

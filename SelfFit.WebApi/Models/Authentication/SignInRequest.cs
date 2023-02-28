@@ -1,4 +1,4 @@
-﻿namespace SelfFit.WebApi.Models.User.Requests
+﻿namespace SelfFit.WebApi.Models.Authentication
 {
     public class SignInRequest
     {

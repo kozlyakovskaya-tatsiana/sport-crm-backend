@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using SelfFit.Identity.Entities;
+using SelfFit.Domain.Entities;
 
 namespace SelfFit.Identity.Features.Authentication.Commands
 {
@@ -13,15 +13,15 @@ namespace SelfFit.Identity.Features.Authentication.Commands
         
         public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, bool >
         {
-            private readonly UserManager<SelfFitIdentityUser> _userManager;
+            private readonly UserManager<User> _userManager;
 
-            public CreateUserCommandHandler(UserManager<SelfFitIdentityUser> userManager)
+            public CreateUserCommandHandler(UserManager<User> userManager)
             {
                 _userManager = userManager;
             }
             public async Task<bool> Handle(CreateUserCommand createUserCommand, CancellationToken cancellationToken)
             {
-                var user = new SelfFitIdentityUser
+                var user = new User
                 {
                     Email = createUserCommand.Email,
                     UserName = createUserCommand.Email

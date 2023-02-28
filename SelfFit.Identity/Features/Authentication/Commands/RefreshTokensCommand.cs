@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using SelfFit.Identity.Entities;
+using SelfFit.Domain.Entities;
 using SelfFit.Identity.Models;
 using SelfFit.Identity.Services;
 using SelfFit.Identity.Settings;
@@ -19,12 +19,12 @@ namespace SelfFit.Identity.Features.Authentication.Commands
         public class RefreshTokensCommandHandler : IRequestHandler<RefreshTokensCommand, TokenPair>
         {
             private readonly ITokenService _tokenService;
-            private readonly UserManager<SelfFitIdentityUser> _userManager;
+            private readonly UserManager<User> _userManager;
             private readonly JwtSettings _jwtSettings;
 
             public RefreshTokensCommandHandler(
                 ITokenService tokenService,
-                UserManager<SelfFitIdentityUser> userManager,
+                UserManager<User> userManager,
                 IOptions<JwtSettings> jwtSettings)
             {
                 _tokenService = tokenService;
