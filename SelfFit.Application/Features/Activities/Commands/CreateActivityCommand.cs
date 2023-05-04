@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
 using SelfFit.Application.Exceptions;
 using SelfFit.Application.Repositories;
@@ -40,6 +41,14 @@ namespace SelfFit.Application.Features.Activities.Commands
             {
                 return await _sportActivityRepository.Exist(activity => activity.Name == sportActivityName);
             }
+        }
+    }
+    public class CreateActivityCommandValidator : AbstractValidator<CreateActivityCommand>
+    {
+        public CreateActivityCommandValidator()
+        {
+            RuleFor(com => com.ActivityName).NotNull().NotEmpty();
+            RuleFor(com => com.CostPerHourInByn).NotNull().NotEmpty();
         }
     }
 }

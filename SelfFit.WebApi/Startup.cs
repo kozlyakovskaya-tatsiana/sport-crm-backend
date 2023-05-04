@@ -9,6 +9,7 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using SelfFit.Application;
+using SelfFit.Application.Features.Activities.Commands;
 using SelfFit.Identity;
 using SelfFit.Persistence;
 using SelfFit.Persistence.Seeders;
@@ -35,12 +36,14 @@ namespace SelfFit.WebApi
             services.AddSwaggerConfiguration();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddFluentValidationAutoValidation();
-            services.AddValidatorsFromAssemblyContaining<SignInRequestValidator>();
+            services.AddValidatorsFromAssemblyContaining<CreateActivityCommandValidator>();
 
             services.AddControllers().AddJsonOptions(jsonOptions =>
             {
                 jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = null;
-            });
+            })
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddApplication();
             services.AddPersistence(Configuration);
@@ -72,10 +75,10 @@ namespace SelfFit.WebApi
             app.UseRouting();
 
             app.UseCors(builder => builder
-                .WithOrigins(originsOptions.Value.OriginUrls?.ToArray())
+                //.WithOrigins(originsOptions.Value.OriginUrls?.ToArray())
+                .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .Build()
             );
 
             app.UseAuthentication();

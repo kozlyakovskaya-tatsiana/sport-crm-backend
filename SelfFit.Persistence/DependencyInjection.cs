@@ -6,6 +6,7 @@ using SelfFit.Application.Repositories;
 using SelfFit.Domain.Entities;
 using SelfFit.Identity.Entities;
 using SelfFit.Identity.Settings;
+using SelfFit.Persistence.Extensions;
 using SelfFit.Persistence.Repositories;
 using SelfFit.Persistence.Seeders;
 
@@ -17,13 +18,12 @@ namespace SelfFit.Persistence
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<SelfFitDbContext>(options =>
-                options.UseNpgsql(
+                options.UseLazyLoadingProxies().UseNpgsql(
                     configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly(typeof(SelfFitDbContext).Assembly.FullName)));
             services.AddScoped<SelfFitDbContext>();
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<ISportActivityRepository, SportActivityRepository>();
+            services.AddRepositories();
 
             services.AddScoped<SelfFitAuthenticationDbSeeder>();
 

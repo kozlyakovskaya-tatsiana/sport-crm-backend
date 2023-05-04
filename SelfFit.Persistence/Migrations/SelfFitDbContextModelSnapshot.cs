@@ -120,21 +120,6 @@ namespace SelfFit.Persistence.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("PlaygroundSportActivity", b =>
-                {
-                    b.Property<Guid>("SuitableActivitiesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("SuitablePlaygroundsId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("SuitableActivitiesId", "SuitablePlaygroundsId");
-
-                    b.HasIndex("SuitablePlaygroundsId");
-
-                    b.ToTable("PlaygroundSportActivity");
-                });
-
             modelBuilder.Entity("SelfFit.Domain.Entities.Contract", b =>
                 {
                     b.Property<Guid>("Id")
@@ -147,28 +132,23 @@ namespace SelfFit.Persistence.Migrations
                     b.Property<DateTimeOffset>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid?>("TenantId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TenantId");
 
                     b.ToTable("Contracts");
                 });
 
-            modelBuilder.Entity("SelfFit.Domain.Entities.Playground", b =>
+            modelBuilder.Entity("SelfFit.Domain.Entities.Image", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Base64Data")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Playgrounds");
+                    b.ToTable("Image");
                 });
 
             modelBuilder.Entity("SelfFit.Domain.Entities.SportActivity", b =>
@@ -194,17 +174,8 @@ namespace SelfFit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ContractId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("InstructorId")
-                        .HasColumnType("uuid");
-
                     b.Property<string>("Name")
                         .HasColumnType("text");
-
-                    b.Property<Guid?>("PlaygroundId")
-                        .HasColumnType("uuid");
 
                     b.Property<Guid?>("SportActivityId")
                         .HasColumnType("uuid");
@@ -213,12 +184,6 @@ namespace SelfFit.Persistence.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ContractId");
-
-                    b.HasIndex("InstructorId");
-
-                    b.HasIndex("PlaygroundId");
 
                     b.HasIndex("SportActivityId");
 
@@ -233,13 +198,10 @@ namespace SelfFit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("text");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("text");
-
                     b.Property<string>("MobilePhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.Property<Guid?>("SportGroupId")
@@ -252,16 +214,42 @@ namespace SelfFit.Persistence.Migrations
                     b.ToTable("SportGroupMember");
                 });
 
-            modelBuilder.Entity("SelfFit.Domain.Entities.Tenant", b =>
+            modelBuilder.Entity("SelfFit.Domain.Entities.SportPlayground", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ImageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId")
+                        .IsUnique();
+
+                    b.ToTable("Playgrounds");
+                });
+
+            modelBuilder.Entity("SelfFit.Domain.Entities.Tenant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ContractId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContractId")
+                        .IsUnique();
 
                     b.ToTable("Tenants");
                 });
@@ -364,6 +352,21 @@ namespace SelfFit.Persistence.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("SportActivitySportPlayground", b =>
+                {
+                    b.Property<Guid>("SportActivitiesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SportPlaygroundsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("SportActivitiesId", "SportPlaygroundsId");
+
+                    b.HasIndex("SportPlaygroundsId");
+
+                    b.ToTable("SportActivitySportPlayground");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("SelfFit.Identity.Entities.Role", null)
@@ -415,55 +418,16 @@ namespace SelfFit.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PlaygroundSportActivity", b =>
-                {
-                    b.HasOne("SelfFit.Domain.Entities.SportActivity", null)
-                        .WithMany()
-                        .HasForeignKey("SuitableActivitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SelfFit.Domain.Entities.Playground", null)
-                        .WithMany()
-                        .HasForeignKey("SuitablePlaygroundsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("SelfFit.Domain.Entities.Contract", b =>
-                {
-                    b.HasOne("SelfFit.Domain.Entities.Tenant", "Tenant")
-                        .WithMany("Contracts")
-                        .HasForeignKey("TenantId");
-
-                    b.Navigation("Tenant");
-                });
-
             modelBuilder.Entity("SelfFit.Domain.Entities.SportGroup", b =>
                 {
-                    b.HasOne("SelfFit.Domain.Entities.Contract", "Contract")
-                        .WithMany("Groups")
-                        .HasForeignKey("ContractId");
-
-                    b.HasOne("SelfFit.Domain.Entities.User", "Instructor")
-                        .WithMany("SportGroups")
-                        .HasForeignKey("InstructorId");
-
-                    b.HasOne("SelfFit.Domain.Entities.Playground", null)
-                        .WithMany("SportGroups")
-                        .HasForeignKey("PlaygroundId");
-
                     b.HasOne("SelfFit.Domain.Entities.SportActivity", "SportActivity")
                         .WithMany("SportGroups")
-                        .HasForeignKey("SportActivityId");
+                        .HasForeignKey("SportActivityId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("SelfFit.Domain.Entities.Tenant", "Tenant")
-                        .WithMany()
+                        .WithMany("SportGroups")
                         .HasForeignKey("TenantId");
-
-                    b.Navigation("Contract");
-
-                    b.Navigation("Instructor");
 
                     b.Navigation("SportActivity");
 
@@ -474,19 +438,55 @@ namespace SelfFit.Persistence.Migrations
                 {
                     b.HasOne("SelfFit.Domain.Entities.SportGroup", "SportGroup")
                         .WithMany("Members")
-                        .HasForeignKey("SportGroupId");
+                        .HasForeignKey("SportGroupId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("SportGroup");
                 });
 
-            modelBuilder.Entity("SelfFit.Domain.Entities.Contract", b =>
+            modelBuilder.Entity("SelfFit.Domain.Entities.SportPlayground", b =>
                 {
-                    b.Navigation("Groups");
+                    b.HasOne("SelfFit.Domain.Entities.Image", "Image")
+                        .WithOne("SportPlayground")
+                        .HasForeignKey("SelfFit.Domain.Entities.SportPlayground", "ImageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Image");
                 });
 
-            modelBuilder.Entity("SelfFit.Domain.Entities.Playground", b =>
+            modelBuilder.Entity("SelfFit.Domain.Entities.Tenant", b =>
                 {
-                    b.Navigation("SportGroups");
+                    b.HasOne("SelfFit.Domain.Entities.Contract", "Contract")
+                        .WithOne("Tenant")
+                        .HasForeignKey("SelfFit.Domain.Entities.Tenant", "ContractId");
+
+                    b.Navigation("Contract");
+                });
+
+            modelBuilder.Entity("SportActivitySportPlayground", b =>
+                {
+                    b.HasOne("SelfFit.Domain.Entities.SportActivity", null)
+                        .WithMany()
+                        .HasForeignKey("SportActivitiesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SelfFit.Domain.Entities.SportPlayground", null)
+                        .WithMany()
+                        .HasForeignKey("SportPlaygroundsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("SelfFit.Domain.Entities.Contract", b =>
+                {
+                    b.Navigation("Tenant");
+                });
+
+            modelBuilder.Entity("SelfFit.Domain.Entities.Image", b =>
+                {
+                    b.Navigation("SportPlayground");
                 });
 
             modelBuilder.Entity("SelfFit.Domain.Entities.SportActivity", b =>
@@ -500,11 +500,6 @@ namespace SelfFit.Persistence.Migrations
                 });
 
             modelBuilder.Entity("SelfFit.Domain.Entities.Tenant", b =>
-                {
-                    b.Navigation("Contracts");
-                });
-
-            modelBuilder.Entity("SelfFit.Domain.Entities.User", b =>
                 {
                     b.Navigation("SportGroups");
                 });

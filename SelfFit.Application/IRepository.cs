@@ -14,6 +14,7 @@ namespace SelfFit.Application
         Task<IEnumerable<TEntity>> GetAllAsync();
         Task<TEntity> GetByIdAsync(Guid id);
         Task<bool> AddAsync(TEntity entity);
+        Task<bool> AddRangeAsync(IEnumerable<TEntity> entities);
         Task<bool> UpdateAsync(TEntity entity);
         Task<bool> DeleteAsync(Guid id);
         Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate);

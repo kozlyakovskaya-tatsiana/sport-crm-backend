@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace SelfFit.Persistence.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -193,7 +193,7 @@ namespace SelfFit.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PlaygroundSportActivity",
+                name: "SportActivitySportPlayground",
                 columns: table => new
                 {
                     SuitableActivitiesId = table.Column<Guid>(type: "uuid", nullable: false),
@@ -201,15 +201,15 @@ namespace SelfFit.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlaygroundSportActivity", x => new { x.SuitableActivitiesId, x.SuitablePlaygroundsId });
+                    table.PrimaryKey("PK_SportActivitySportPlayground", x => new { x.SuitableActivitiesId, x.SuitablePlaygroundsId });
                     table.ForeignKey(
-                        name: "FK_PlaygroundSportActivity_Activities_SuitableActivitiesId",
+                        name: "FK_SportActivitySportPlayground_Activities_SuitableActivitiesId",
                         column: x => x.SuitableActivitiesId,
                         principalTable: "Activities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PlaygroundSportActivity_Playgrounds_SuitablePlaygroundsId",
+                        name: "FK_SportActivitySportPlayground_Playgrounds_SuitablePlayground~",
                         column: x => x.SuitablePlaygroundsId,
                         principalTable: "Playgrounds",
                         principalColumn: "Id",
@@ -246,7 +246,7 @@ namespace SelfFit.Persistence.Migrations
                     TenantId = table.Column<Guid>(type: "uuid", nullable: true),
                     ContractId = table.Column<Guid>(type: "uuid", nullable: true),
                     InstructorId = table.Column<Guid>(type: "uuid", nullable: true),
-                    PlaygroundId = table.Column<Guid>(type: "uuid", nullable: true)
+                    SportPlaygroundId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -270,8 +270,8 @@ namespace SelfFit.Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_SportGroups_Playgrounds_PlaygroundId",
-                        column: x => x.PlaygroundId,
+                        name: "FK_SportGroups_Playgrounds_SportPlaygroundId",
+                        column: x => x.SportPlaygroundId,
                         principalTable: "Playgrounds",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -347,8 +347,8 @@ namespace SelfFit.Persistence.Migrations
                 column: "TenantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlaygroundSportActivity_SuitablePlaygroundsId",
-                table: "PlaygroundSportActivity",
+                name: "IX_SportActivitySportPlayground_SuitablePlaygroundsId",
+                table: "SportActivitySportPlayground",
                 column: "SuitablePlaygroundsId");
 
             migrationBuilder.CreateIndex(
@@ -367,14 +367,14 @@ namespace SelfFit.Persistence.Migrations
                 column: "InstructorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SportGroups_PlaygroundId",
-                table: "SportGroups",
-                column: "PlaygroundId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_SportGroups_SportActivityId",
                 table: "SportGroups",
                 column: "SportActivityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SportGroups_SportPlaygroundId",
+                table: "SportGroups",
+                column: "SportPlaygroundId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SportGroups_TenantId",
@@ -400,7 +400,7 @@ namespace SelfFit.Persistence.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "PlaygroundSportActivity");
+                name: "SportActivitySportPlayground");
 
             migrationBuilder.DropTable(
                 name: "SportGroupMember");

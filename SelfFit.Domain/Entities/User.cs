@@ -8,7 +8,5 @@ namespace SelfFit.Domain.Entities
     {
         public string RefreshToken { get; set; }
         public DateTimeOffset RefreshTokenExpirationDateTime { get; set; }
-
-        public List<SportGroup> SportGroups { get; set; }
     }
 }

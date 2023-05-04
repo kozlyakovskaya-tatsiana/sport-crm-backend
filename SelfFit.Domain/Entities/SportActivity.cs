@@ -7,7 +7,7 @@ namespace SelfFit.Domain.Entities
         public string Name { get; set; }
         public decimal CostPerHourInByn { get; set; }
 
-        public List<Playground> SuitablePlaygrounds { get; set; }
-        public List<SportGroup> SportGroups { get; set; }
+        public virtual List<SportPlayground> SportPlaygrounds { get; set; }
+        public virtual List<SportGroup> SportGroups { get; set; }
     }
 }

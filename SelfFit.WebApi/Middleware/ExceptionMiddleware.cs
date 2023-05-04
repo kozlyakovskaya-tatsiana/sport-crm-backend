@@ -38,8 +38,7 @@ namespace SelfFit.WebApi.Middleware
             };
             await context.Response.WriteAsync(new ErrorDetails()
             {
-                StatusCode = context.Response.StatusCode,
-                Message = exception.Message
+                StatusCode = context.Response.StatusCode
             }.ToString());
         }
     }

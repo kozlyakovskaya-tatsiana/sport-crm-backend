@@ -10,11 +10,16 @@ namespace SelfFit.Domain.EntityConfigurations
         {
             builder
                 .HasMany(g => g.Members)
-                .WithOne(m => m.SportGroup);
+                .WithOne(m => m.SportGroup)
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder
-                .HasOne(g => g.Instructor)
-                .WithMany(i => i.SportGroups);
+                .HasOne(g => g.Tenant)
+                .WithMany(t => t.SportGroups);
+
+            builder
+                .HasOne(g => g.SportActivity)
+                .WithMany(a => a.SportGroups);
         }
     }
 }

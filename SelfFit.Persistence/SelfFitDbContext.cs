@@ -16,7 +16,7 @@ namespace SelfFit.Persistence
         public DbSet<SportGroupMember> SportGroupMembers { get; set; }
         public DbSet<SportActivity> Activities { get; set; }
         public DbSet<Contract> Contracts { get; set; }
-        public DbSet<Playground> Playgrounds { get; set; }
+        public DbSet<SportPlayground> Playgrounds { get; set; }
         public DbSet<SportGroup> SportGroups { get; set; }
         public DbSet<Tenant> Tenants { get; set; }
         public new DbSet<User> Users { get; set; }

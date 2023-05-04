@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SelfFit.Domain.Entities
 {
@@ -6,10 +7,10 @@ namespace SelfFit.Domain.Entities
     {
         public string Name { get; set; }
 
-        public SportActivity SportActivity { get; set; }
-        public Tenant Tenant { get; set; }
-        public Contract Contract { get; set; }
-        public User Instructor { get; set; }
-        public List<SportGroupMember> Members { get; set; }
+        public virtual SportActivity SportActivity { get; set; }
+        public Guid? SportActivityId { get; set; }
+        public virtual Tenant Tenant { get; set; }
+        public Guid? TenantId { get; set; }
+        public virtual List<SportGroupMember> Members { get; set; }
     }
 }

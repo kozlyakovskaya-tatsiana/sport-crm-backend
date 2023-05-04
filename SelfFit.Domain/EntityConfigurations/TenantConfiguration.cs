@@ -9,7 +9,7 @@ namespace SelfFit.Domain.EntityConfigurations
         public void Configure(EntityTypeBuilder<Tenant> builder)
         {
             builder
-                .HasMany(t => t.Contracts)
+                .HasOne(t => t.Contract)
                 .WithOne(c => c.Tenant);
         }
     }
